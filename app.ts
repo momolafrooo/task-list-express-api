@@ -30,7 +30,7 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json(err);
+  res.json(err.message);
 });
 
 export default app;
