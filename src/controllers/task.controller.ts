@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from "express";
+import UserService from "../services/user.service";
 import TaskService from "../services/task.service";
 
 export default class TaskController {
   // SAVE TASK
   public static saveTask = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tasks = await TaskService.saveTask(req.body);
+      const user = await UserService.getUserByEmail(res.locals.email);
+      const tasks = await TaskService.saveTask({ name: req.body.name, authorId: user?.id });
 
       // RETURN RESPONSE
       res.json(tasks);

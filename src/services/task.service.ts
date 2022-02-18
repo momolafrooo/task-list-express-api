@@ -17,9 +17,7 @@ export default class TaskService {
   // GET ALL TASKS
   public static getAllTasks = async () => {
     try {
-      return await this.prisma.task.findMany({
-        include: { user: true },
-      });
+      return await this.prisma.task.findMany({});
     } catch (error) {
       throw error;
     }

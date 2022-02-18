@@ -28,7 +28,7 @@ export default class AuthService {
       // FIND THE USER
       const user = await this.prisma.user.findUnique({ where: { email: data.email } });
 
-      if (!user || !compareSync(data.password, user?.password)) throw new httpErrors.Unauthorized("Unauthorized");
+      if (!user || !compareSync(data.password, user?.password)) throw new httpErrors.Unauthorized();
 
       const accessToken = await JWT.generateToken(user.email);
 
