@@ -3,11 +3,7 @@ import TaskService from "../services/task.service";
 
 export default class TaskController {
   // SAVE TASK
-  public static saveTask = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public static saveTask = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tasks = await TaskService.saveTask(req.body);
 
@@ -20,11 +16,7 @@ export default class TaskController {
   };
 
   // GET ALL TASKS
-  public static getAllTasks = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public static getAllTasks = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tasks = await TaskService.getAllTasks();
 
@@ -37,11 +29,7 @@ export default class TaskController {
   };
 
   // GET TASK BY ID
-  public static getTaskById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public static getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const task = await TaskService.getTaskById(parseInt(id));
@@ -57,11 +45,7 @@ export default class TaskController {
   };
 
   // UPDATE TASK BY ID
-  public static updateTaskById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public static updateTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const task = await TaskService.updateTaskById(parseInt(id), req.body);
@@ -75,11 +59,7 @@ export default class TaskController {
   };
 
   // DELETE TASK BY ID
-  public static deleteTaskById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public static deleteTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const task = await TaskService.deleteTaskById(parseInt(id));
