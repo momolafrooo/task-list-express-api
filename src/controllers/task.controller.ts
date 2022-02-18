@@ -30,6 +30,20 @@ export default class TaskController {
     }
   };
 
+  // GET CURRENT USER TASKS
+  public static getCurrentUserTasks = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await UserService.getUserByEmail(res.locals.email);
+      const tasks = await TaskService.getAllTasksByUserId(user?.id!);
+
+      // RETURN RESPONSE
+      return res.json(tasks);
+    } catch (error) {
+      // RETURN ERROR
+      next(error);
+    }
+  };
+
   // GET TASK BY ID
   public static getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {

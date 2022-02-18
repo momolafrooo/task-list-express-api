@@ -23,6 +23,15 @@ export default class TaskService {
     }
   };
 
+  // GET ALL TASKS BY USER_ID
+  public static getAllTasksByUserId = async (authorId: number) => {
+    try {
+      return await this.prisma.task.findMany({ where: { authorId } });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // GET TASK BY ID
   public static getTaskById = async (id: number) => {
     try {

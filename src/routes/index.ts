@@ -9,6 +9,7 @@ export const router = express.Router();
  **/
 router.post("/tasks", JWT.verifyAccessToken, TaskController.saveTask);
 router.get("/tasks", JWT.verifyAccessToken, TaskController.getAllTasks);
+router.get("/current-user/tasks", JWT.verifyAccessToken, TaskController.getCurrentUserTasks);
 router.get("/tasks/:id", JWT.verifyAccessToken, TaskController.getTaskById);
 router.put("/tasks/:id", JWT.verifyAccessToken, TaskController.updateTaskById);
 router.delete("/tasks/:id", JWT.verifyAccessToken, TaskController.deleteTaskById);
