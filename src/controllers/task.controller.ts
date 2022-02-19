@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import UserService from "../services/user.service";
 import TaskService from "../services/task.service";
+import { StoreTaskValidation, UpdateTaskValidation } from "../validations/task.validation";
 
 export default class TaskController {
   // SAVE TASK
   public static saveTask = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const data = await StoreTaskValidation.validateAsync(req.body);
       const user = await UserService.getUserByEmail(res.locals.email);
-      const tasks = await TaskService.saveTask({ name: req.body.name, authorId: user?.id });
+      data.authorId = user?.id;
+      const tasks = await TaskService.saveTask(data);
 
       // RETURN RESPONSE
       res.json(tasks);
@@ -64,7 +67,8 @@ export default class TaskController {
   public static updateTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const task = await TaskService.updateTaskById(parseInt(id), req.body);
+      const data = await UpdateTaskValidation.validateAsync(req.body);
+      const task = await TaskService.updateTaskById(parseInt(id), data);
 
       // RETURN RESPONSE
       return res.json(task);

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import httpErrors from "http-errors";
 
 export default class TaskService {
   private static prisma: PrismaClient = new PrismaClient();
@@ -6,6 +7,9 @@ export default class TaskService {
   // SAVE TASK
   public static saveTask = async (data: any) => {
     try {
+      const task = await this.prisma.task.findUnique({ where: { name: data.name } });
+      if (task) throw new httpErrors.Conflict(`The task '${data.name}' already exists !`);
+
       return await this.prisma.task.create({
         data,
       });
@@ -35,9 +39,11 @@ export default class TaskService {
   // GET TASK BY ID
   public static getTaskById = async (id: number) => {
     try {
-      return await this.prisma.task.findUnique({
-        where: { id },
-      });
+      const task = await this.prisma.task.findUnique({ where: { id } });
+
+      if (!task) throw new httpErrors.NotFound(`Task Not Found !`);
+
+      return task;
     } catch (error) {
       throw error;
     }
@@ -46,6 +52,18 @@ export default class TaskService {
   // UPDATE TASK BY ID
   public static updateTaskById = async (id: number, data: any) => {
     try {
+      await this.getTaskById(id);
+      const task = await this.prisma.task.findFirst({
+        where: {
+          name: data.name,
+          NOT: {
+            id,
+          },
+        },
+      });
+
+      if (task) throw new httpErrors.Conflict(`The task '${data.name}' already exists !`);
+
       return await this.prisma.task.update({
         where: { id },
         data,
@@ -58,6 +76,7 @@ export default class TaskService {
   // DELETE TASK BY ID
   public static deleteTaskById = async (id: number) => {
     try {
+      await this.getTaskById(id);
       return await this.prisma.task.delete({
         where: { id },
       });
