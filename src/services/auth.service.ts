@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { hashSync, compareSync } from "bcrypt";
 import httpErrors from "http-errors";
 import { JWT } from "../config/jwt";
+import UserService from "./user.service";
 
 export default class AuthService {
   private static prisma: PrismaClient = new PrismaClient();
@@ -11,6 +12,9 @@ export default class AuthService {
     try {
       // ENCRYPT THE PASSWORD
       data.password = hashSync(data.password, 12);
+
+      const userExists = await UserService.getUserByEmail(data.email);
+      if (userExists) throw new httpErrors.Conflict(`Email already taken !`);
 
       // SAVE THE USER
       const user = await this.prisma.user.create({ data });
